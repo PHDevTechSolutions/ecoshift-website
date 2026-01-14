@@ -1,9 +1,11 @@
 "use client"
 
+import { useState, useMemo } from "react"
 import Header from "@/components/homepage/header"
 import Footer from "@/components/homepage/footer"
 import BackToTop from "@/components/homepage/back-to-top"
 import { motion } from "framer-motion"
+import { ArrowRight, Lightbulb, Zap, Sun, Star, Lamp } from "lucide-react"
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -25,107 +27,216 @@ const itemVariants = {
   },
 }
 
+// Floating animation for icons
+const floatAnimation = {
+  animate: {
+    y: [0, -6, 0],
+    transition: { duration: 3, repeat: Infinity, ease: "easeInOut" },
+  },
+}
+
 export default function ProjectsPage() {
   const projects = [
-    {
-      title: "Modern Office Complex - Downtown District",
-      description: "Complete lighting retrofit for 50,000 sq ft corporate office. Energy savings: 45%.",
-      image: "/project-office-complex.jpg",
-    },
-    {
-      title: "Luxury Residential Development",
-      description: "Smart lighting systems for premium residential units with automated control.",
-      image: "/project-residential.jpg",
-    },
-    {
-      title: "Retail Shopping Center Upgrade",
-      description: "Enhanced ambiance and efficiency for 100+ retail spaces and common areas.",
-      image: "/project-retail.jpg",
-    },
-    {
-      title: "Hospitality & Restaurant Design",
-      description: "Custom architectural lighting creating sophisticated atmospheres for dining establishments.",
-      image: "/project-hospitality.jpg",
-    },
-    {
-      title: "Industrial Warehouse Lighting",
-      description: "High-efficiency LED systems for manufacturing facility. 24/7 operational reliability.",
-      image: "/project-industrial.jpg",
-    },
-    {
-      title: "Medical Facility Lighting",
-      description: "Specialized lighting solutions for healthcare environment with compliance certification.",
-      image: "/project-medical.jpg",
-    },
+    { title: "Modern Office Complex - Downtown District", image: "/project-office-complex.jpg", logo: "/logos/office-logo.png" },
+    { title: "Luxury Residential Development", image: "/project-residential.jpg", logo: "/logos/residential-logo.png" },
+    { title: "Retail Shopping Center Upgrade", image: "/project-retail.jpg", logo: "/logos/retail-logo.png" },
+    { title: "Hospitality & Restaurant Design", image: "/project-hospitality.jpg", logo: "/logos/hospitality-logo.png" },
+    { title: "Industrial Warehouse Lighting", image: "/project-industrial.jpg", logo: "/logos/industrial-logo.png" },
+    { title: "Medical Facility Lighting", image: "/project-medical.jpg", logo: "/logos/medical-logo.png" },
+    { title: "Hospitality & Restaurant Design", image: "/project-hospitality.jpg", logo: "/logos/hospitality-logo.png" },
+    { title: "Industrial Warehouse Lighting", image: "/project-industrial.jpg", logo: "/logos/industrial-logo.png" },
+    { title: "Medical Facility Lighting", image: "/project-medical.jpg", logo: "/logos/medical-logo.png" },
   ]
+
+  const [searchQuery, setSearchQuery] = useState("")
+  const [currentPage, setCurrentPage] = useState(1)
+  const projectsPerPage = 6
+
+  const filteredProjects = useMemo(
+    () => projects.filter((p) => p.title.toLowerCase().includes(searchQuery.toLowerCase())),
+    [searchQuery, projects]
+  )
+
+  const totalPages = Math.ceil(filteredProjects.length / projectsPerPage)
+  const displayedProjects = filteredProjects.slice(
+    (currentPage - 1) * projectsPerPage,
+    currentPage * projectsPerPage
+  )
 
   return (
     <main className="min-h-screen bg-background">
       <Header />
-      <div className="pt-32">
+
+      <div className="pt-32 max-w-7xl mx-auto px-6">
         {/* Hero */}
-        <section className="py-24 bg-secondary/30">
-          <div className="max-w-7xl mx-auto px-6">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true, margin: "-100px" }}
-              className="text-center max-w-3xl mx-auto"
-            >
-              <span className="text-xs font-mono text-muted-foreground tracking-wider">◆ PROJECTS</span>
-              <h1 className="font-serif text-5xl md:text-6xl mt-4 mb-6 leading-tight">Completed projects</h1>
-              <p className="text-muted-foreground text-lg">
-                Explore our portfolio of successful lighting installations across diverse industries and spaces.
-              </p>
-            </motion.div>
-          </div>
+        <section className="py-12 text-center">
+          <h1 className="font-serif text-5xl md:text-6xl mb-4">Completed Projects</h1>
+          <p className="text-muted-foreground text-lg">
+            Explore our portfolio of successful lighting installations across diverse industries.
+          </p>
         </section>
 
+        {/* Search */}
+        <div className="mb-8 flex justify-center">
+          <input
+            type="text"
+            placeholder="Search projects..."
+            value={searchQuery}
+            onChange={(e) => {
+              setSearchQuery(e.target.value)
+              setCurrentPage(1)
+            }}
+            className="w-full max-w-md border border-border rounded-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-emerald-500"
+          />
+        </div>
+
         {/* Projects Grid */}
+        <section className="pb-24">
+          <motion.div
+            className="grid md:grid-cols-3 gap-6"
+            variants={containerVariants}
+            initial="hidden"
+            whileInView="visible"
+            viewport={{ once: true, margin: "-100px" }}
+          >
+            {displayedProjects.map((project, index) => (
+              <motion.div
+                key={index}
+                className="relative bg-card border border-border rounded-2xl overflow-hidden group h-64"
+                variants={itemVariants}
+                initial="hidden"
+                whileInView="visible"
+              >
+                <motion.img
+                  src={project.image}
+                  alt={project.title}
+                  className="w-full h-full object-cover"
+                  initial={{ scale: 1 }}
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.3 }}
+                />
+
+                <div className="absolute inset-0 bg-black/50 flex flex-col justify-center items-center text-center p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                  {project.logo && (
+                    <img
+                      src={project.logo}
+                      alt={`${project.title} logo`}
+                      className="w-12 h-12 mb-3 object-contain transform translate-y-6 group-hover:translate-y-0 transition-all duration-300"
+                    />
+                  )}
+                  <h3 className="text-white font-semibold text-lg transform translate-y-6 group-hover:translate-y-0 transition-all duration-300">
+                    {project.title}
+                  </h3>
+                </div>
+              </motion.div>
+            ))}
+          </motion.div>
+
+          {/* Pagination */}
+          {totalPages > 1 && (
+            <div className="mt-8 flex justify-center items-center gap-2">
+              <button
+                onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
+                disabled={currentPage === 1}
+                className="px-3 py-1 border rounded hover:bg-emerald-500 hover:text-white disabled:opacity-50"
+              >
+                Prev
+              </button>
+
+              {Array.from({ length: totalPages }).map((_, i) => (
+                <button
+                  key={i}
+                  onClick={() => setCurrentPage(i + 1)}
+                  className={`px-3 py-1 border rounded ${
+                    currentPage === i + 1
+                      ? "bg-emerald-500 text-white"
+                      : "hover:bg-emerald-500 hover:text-white"
+                  }`}
+                >
+                  {i + 1}
+                </button>
+              ))}
+
+              <button
+                onClick={() => setCurrentPage((p) => Math.min(p + 1, totalPages))}
+                disabled={currentPage === totalPages}
+                className="px-3 py-1 border rounded hover:bg-emerald-500 hover:text-white disabled:opacity-50"
+              >
+                Next
+              </button>
+            </div>
+          )}
+        </section>
+
+        {/* --- Projects Page CTA --- */}
         <section className="py-24">
           <div className="max-w-7xl mx-auto px-6">
             <motion.div
-              className="grid md:grid-cols-3 gap-6"
-              variants={containerVariants}
-              initial="hidden"
-              whileInView="visible"
+              initial={{ opacity: 0, y: 40 }}
+              whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
+              transition={{ duration: 0.6, ease: "easeOut" }}
+              className="relative bg-card border border-border rounded-3xl p-12 md:p-16 overflow-hidden"
             >
-              {projects.map((project, index) => (
-                <motion.div
-                  key={index}
-                  variants={itemVariants}
-                  whileHover={{ y: -5 }}
-                  className="bg-card border border-border rounded-2xl overflow-hidden"
+              {/* Floating light icons */}
+              <motion.div {...floatAnimation} className="absolute top-8 left-8 w-10 h-10 border border-border rounded-lg flex items-center justify-center">
+                <Lightbulb className="w-4 h-4 text-emerald-400" />
+              </motion.div>
+              <motion.div {...floatAnimation} className="absolute top-8 right-8 w-10 h-10 border border-border rounded-lg flex items-center justify-center">
+                <Zap className="w-4 h-4 text-emerald-400" />
+              </motion.div>
+              <motion.div {...floatAnimation} className="absolute bottom-8 left-8 w-10 h-10 border border-border rounded-lg flex items-center justify-center">
+                <Sun className="w-4 h-4 text-emerald-400" />
+              </motion.div>
+              <motion.div {...floatAnimation} className="absolute bottom-8 right-8 w-10 h-10 border border-border rounded-lg flex items-center justify-center">
+                <Star className="w-4 h-4 text-emerald-400" />
+              </motion.div>
+              <motion.div {...floatAnimation} className="absolute top-1/2 right-16 -translate-y-1/2 w-10 h-10 border border-border rounded-lg flex items-center justify-center">
+                <Lamp className="w-4 h-4 text-emerald-400" />
+              </motion.div>
+              <motion.div {...floatAnimation} className="absolute bottom-1/3 left-16 w-10 h-10 border border-border rounded-lg flex items-center justify-center">
+                <span className="text-emerald-400 text-lg">+</span>
+              </motion.div>
+
+              {/* Main content */}
+              <div className="text-center max-w-2xl mx-auto relative z-10">
+                <motion.h2
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, ease: "easeOut" }}
+                  className="font-serif text-4xl md:text-5xl mb-4 leading-tight"
                 >
-                  <div className="w-full h-48 bg-secondary/50 overflow-hidden">
-                    <motion.img
-                      src={project.image}
-                      alt={project.title}
-                      className="w-full h-full object-cover"
-                      initial={{ scale: 1 }}
-                      whileHover={{ scale: 1.05 }}
-                      transition={{ duration: 0.3 }}
-                    />
-                  </div>
-                  <div className="p-6">
-                    <h3 className="font-semibold text-lg mb-2 leading-snug">{project.title}</h3>
-                    <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{project.description}</p>
-                    <motion.button
-                      whileHover={{ scale: 1.05 }}
-                      whileTap={{ scale: 0.95 }}
-                      className="text-emerald-700 font-medium text-sm hover:text-emerald-800 transition-colors flex items-center gap-2"
-                    >
-                      View Details
-                      <span>→</span>
-                    </motion.button>
-                  </div>
-                </motion.div>
-              ))}
+                  Ready to Light Up Your Next Project?
+                </motion.h2>
+
+                <motion.p
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.1, ease: "easeOut" }}
+                  className="text-muted-foreground mb-8"
+                >
+                  Get in touch with our experts to design and implement the perfect lighting solution for your space.
+                </motion.p>
+
+                <motion.button
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
+                  className="inline-flex items-center gap-2 bg-emerald-700 text-white px-6 py-3 rounded-full text-sm font-medium hover:bg-emerald-800 transition-colors"
+                >
+                  Contact Us
+                  <ArrowRight className="w-4 h-4" />
+                </motion.button>
+              </div>
             </motion.div>
           </div>
         </section>
+        {/* --- End CTA --- */}
       </div>
+
       <Footer />
       <BackToTop />
     </main>
