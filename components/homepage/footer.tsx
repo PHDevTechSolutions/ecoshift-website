@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { motion } from "framer-motion"
 
 export default function Footer() {
@@ -11,29 +12,29 @@ export default function Footer() {
           {/* Brand */}
           <div className="md:col-span-1">
             <div className="flex items-center gap-2 mb-2">
-              <div className="w-5 h-5 border-2 border-foreground rounded-sm flex items-center justify-center">
-                <span className="text-[10px] font-mono">RE</span>
-              </div>
-              <span className="font-serif">Lighting Co.</span>
+              <Image
+                src="/images/logo-green.png"
+                alt="RE Lighting Co."
+                width={250}  // adjust size as needed
+                height={162}
+                className="object-contain"
+              />
             </div>
             <p className="text-xs font-mono text-muted-foreground">
               SMART LIGHTING SOLUTIONS
               <br />
               SYSTEM V2.0
             </p>
-            <p className="text-xs font-mono text-muted-foreground mt-4">◆ ALL SYSTEMS OPERATIONAL</p>
           </div>
 
           {/* Directory */}
           <div>
             <h4 className="text-xs font-mono text-muted-foreground mb-4">DIRECTORY</h4>
             <ul className="space-y-2">
-              {[
-                { name: "Home", href: "/" },
+              {[{ name: "Home", href: "/" },
                 { name: "About_Us", href: "/about" },
                 { name: "Products", href: "/products" },
-                { name: "Projects", href: "/projects" },
-              ].map((link) => (
+                { name: "Projects", href: "/projects" }].map((link) => (
                 <li key={link.name}>
                   <Link href={link.href} className="text-sm hover:text-emerald-700 transition-colors">
                     {link.name}
@@ -85,7 +86,7 @@ export default function Footer() {
         </div>
 
         <div className="flex flex-col md:flex-row items-center justify-between mt-12 pt-8 border-t border-border">
-          <p className="text-xs text-muted-foreground">©2025 LIGHTING SOLUTIONS INC.</p>
+          <p className="text-xs text-muted-foreground">©2025 ECOSHIFT CORP.</p>
           <p className="text-xs text-muted-foreground">DESIGNED FOR EXCELLENCE, BUILT FOR THE FUTURE.</p>
         </div>
       </div>

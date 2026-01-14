@@ -9,7 +9,7 @@ const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfa
 const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jetbrains" })
 
 export const metadata: Metadata = {
-  title: "Typewriter - AI-Powered Email Co-Pilot",
+  title: "LED Lights Supplier & Lighting fixtures in the Philippines | Ecoshift Corp.",
   description: "Emails that write themselves. One sentence from you. Perfect replies forever.",
 }
 

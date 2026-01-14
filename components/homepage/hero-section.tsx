@@ -26,7 +26,7 @@ const itemVariants = {
 
 export default function HeroSection() {
   const [currentSlide, setCurrentSlide] = useState(0)
-  const slides = ["/lighting-architectural.jpg", "/lighting-commercial.jpg", "/lighting-residential.jpg"]
+  const slides = ["/images/clark-taxiway.jpg", "/images/hino-motors.jpg", "/images/imall-antipolo.jpg"]
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -52,16 +52,16 @@ export default function HeroSection() {
               variants={itemVariants}
               className="inline-flex items-center gap-2 text-xs font-mono text-muted-foreground border border-border rounded-full px-3 py-1"
             >
-              <span>SMART LIGHTING SOLUTIONS V2.0</span>
+              <span>Innovative Lighting Solutions</span>
             </motion.div>
 
             <motion.h1
               variants={itemVariants}
               className="font-serif text-5xl md:text-6xl lg:text-7xl leading-[1.1] text-balance"
             >
-              The Fastest Growing
+              Ecoshift
               <br />
-              Provider of Innovative Lighting Solutions
+              Corporation
             </motion.h1>
 
             <motion.p variants={itemVariants} className="text-muted-foreground text-lg max-w-md">
