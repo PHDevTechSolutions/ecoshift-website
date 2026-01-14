@@ -15,7 +15,6 @@
   } from "lucide-react";
   import Header from "@/components/homepage/header";
   import Footer from "@/components/homepage/footer";
-  import BackToTop from "@/components/homepage/back-to-top";
 
   export default function QuotePage() {
     const [status, setStatus] = useState<
@@ -348,7 +347,6 @@
         </section>
 
         <Footer />
-        <BackToTop />
       </main>
     );
   }
