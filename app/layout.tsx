@@ -11,6 +11,9 @@ const jetbrainsMono = JetBrains_Mono({ subsets: ["latin"], variable: "--font-jet
 export const metadata: Metadata = {
   title: "LED Lights Supplier & Lighting fixtures in the Philippines | Ecoshift Corp.",
   description: "Emails that write themselves. One sentence from you. Perfect replies forever.",
+  icons: {
+    icon: "/images/green.png",
+  },
 }
 
 export default function RootLayout({
