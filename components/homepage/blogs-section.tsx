@@ -1,50 +1,13 @@
 "use client"
 
 import { motion } from "framer-motion"
+import { useEffect, useState } from "react"
+import { collection, query, orderBy, getDocs, where } from "firebase/firestore"
+import { db } from "@/lib/firebase"
 
 export default function BlogsSection() {
-  const blogs = [
-    {
-      id: "BLOG-0088",
-      title: "Choosing the Right Lighting for Commercial Spaces",
-      excerpt:
-        "Learn how to select the perfect lighting solutions for your commercial environment. From retail stores to offices, we cover everything you need to know.",
-      image: "/blog-commercial-lighting.jpg",
-      link: "/blogs/commercial-lighting",
-    },
-    {
-      id: "BLOG-2301",
-      title: "How Smart Lighting Reduces Energy Costs",
-      excerpt:
-        "Discover how modern smart lighting systems can cut your energy consumption by up to 40%. Explore automation features and their financial benefits.",
-      image: "/blog-energy-savings.jpg",
-      link: "/blogs/energy-savings",
-    },
-    {
-      id: "BLOG-7725",
-      title: "Top Lighting Trends for Modern Architecture",
-      excerpt:
-        "Stay ahead of design trends with the latest in architectural lighting. From minimalist LED designs to dynamic color-changing systems, explore what's new.",
-      image: "/blog-lighting-trends.jpg",
-      link: "/blogs/lighting-trends",
-    },
-    {
-      id: "BLOG-0030",
-      title: "LED vs Traditional Lighting: A Comprehensive Comparison",
-      excerpt:
-        "Understand the differences between LED and traditional lighting. Learn about efficiency, longevity, cost savings, and environmental impact.",
-      image: "/blog-led-comparison.jpg",
-      link: "/blogs/led-comparison",
-    },
-    {
-      id: "BLOG-2134",
-      title: "Case Study: 50% Energy Reduction in Office Retrofit",
-      excerpt:
-        "Real results from a real project. See how a corporate office cut energy costs by half through smart lighting upgrade. Metrics and ROI included.",
-      image: "/blog-case-study.jpg",
-      link: "/blogs/case-study",
-    },
-  ]
+  const [blogs, setBlogs] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
 
   const containerVariants = {
     hidden: { opacity: 0 },
@@ -65,6 +28,38 @@ export default function BlogsSection() {
       transition: { duration: 0.5, ease: "easeOut" },
     },
   }
+
+  useEffect(() => {
+    const fetchBlogs = async () => {
+      try {
+        const q = query(collection(db, "blogs"), orderBy("createdAt", "desc"), where("website", "==", "Ecoshift Corporation"))
+        const querySnapshot = await getDocs(q)
+        const fetchedBlogs = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }))
+        // Only keep top 3 blogs
+        setBlogs(fetchedBlogs.slice(0, 3))
+      } catch (error) {
+        console.error("Error fetching blogs:", error)
+      } finally {
+        setLoading(false)
+      }
+    }
+
+    fetchBlogs()
+  }, [])
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center py-24">
+        <span className="text-accent animate-spin">Loading...</span>
+      </div>
+    )
+  }
+
+  // Hide section if no blogs
+  if (blogs.length === 0) return null
 
   return (
     <section id="blogs" className="py-24">
@@ -92,17 +87,16 @@ export default function BlogsSection() {
           whileInView="visible"
           viewport={{ once: true, margin: "-100px" }}
         >
-          {blogs.slice(0, 3).map((blog, index) => (
+          {blogs.map((blog, index) => (
             <motion.div
               key={blog.id}
               variants={itemVariants}
               whileHover={{ y: -5 }}
               className="bg-card border border-border rounded-2xl overflow-hidden"
             >
-              {/* Blog image */}
               <div className="w-full h-48 bg-secondary/50 overflow-hidden">
                 <motion.img
-                  src={blog.image}
+                  src={blog.coverImage || "/placeholder.svg"}
                   alt={blog.title}
                   className="w-full h-full object-cover"
                   initial={{ scale: 1 }}
@@ -113,83 +107,12 @@ export default function BlogsSection() {
               <div className="p-6">
                 <span className="text-xs font-mono text-emerald-700">{blog.id}</span>
                 <h3 className="font-semibold text-lg mt-3 mb-2 leading-snug">{blog.title}</h3>
-                <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{blog.excerpt}</p>
+                <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
+                  {(blog.excerpt || blog.sections?.[0]?.description || "").slice(0, 120) +
+                    ((blog.excerpt?.length || blog.sections?.[0]?.description?.length) > 120 ? "…" : "")}
+                </p>
                 <motion.a
-                  href={blog.link}
-                  className="inline-flex items-center text-sm font-medium text-emerald-700 hover:text-emerald-800 transition-colors"
-                  whileHover={{ x: 4 }}
-                >
-                  Read More
-                  <span className="ml-1">→</span>
-                </motion.a>
-              </div>
-            </motion.div>
-          ))}
-        </motion.div>
-
-        <motion.div
-          className="grid md:grid-cols-3 gap-6 mt-6"
-          variants={containerVariants}
-          initial="hidden"
-          whileInView="visible"
-          viewport={{ once: true, margin: "-100px" }}
-        >
-          {blogs.slice(3, 4).map((blog) => (
-            <motion.div
-              key={blog.id}
-              variants={itemVariants}
-              whileHover={{ y: -5 }}
-              className="bg-card border border-border rounded-2xl overflow-hidden"
-            >
-              <div className="w-full h-48 bg-secondary/50 overflow-hidden">
-                <motion.img
-                  src={blog.image}
-                  alt={blog.title}
-                  className="w-full h-full object-cover"
-                  initial={{ scale: 1 }}
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.3 }}
-                />
-              </div>
-              <div className="p-6">
-                <span className="text-xs font-mono text-emerald-700">{blog.id}</span>
-                <h3 className="font-semibold text-lg mt-3 mb-2 leading-snug">{blog.title}</h3>
-                <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{blog.excerpt}</p>
-                <motion.a
-                  href={blog.link}
-                  className="inline-flex items-center text-sm font-medium text-emerald-700 hover:text-emerald-800 transition-colors"
-                  whileHover={{ x: 4 }}
-                >
-                  Read More
-                  <span className="ml-1">→</span>
-                </motion.a>
-              </div>
-            </motion.div>
-          ))}
-
-          {blogs.slice(4).map((blog) => (
-            <motion.div
-              key={blog.id}
-              variants={itemVariants}
-              whileHover={{ y: -5 }}
-              className="bg-card border border-border rounded-2xl overflow-hidden"
-            >
-              <div className="w-full h-48 bg-secondary/50 overflow-hidden">
-                <motion.img
-                  src={blog.image}
-                  alt={blog.title}
-                  className="w-full h-full object-cover"
-                  initial={{ scale: 1 }}
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.3 }}
-                />
-              </div>
-              <div className="p-6">
-                <span className="text-xs font-mono text-emerald-700">{blog.id}</span>
-                <h3 className="font-semibold text-lg mt-3 mb-2 leading-snug">{blog.title}</h3>
-                <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{blog.excerpt}</p>
-                <motion.a
-                  href={blog.link}
+                  href={`/blogs/${blog.slug || blog.id}`}
                   className="inline-flex items-center text-sm font-medium text-emerald-700 hover:text-emerald-800 transition-colors"
                   whileHover={{ x: 4 }}
                 >

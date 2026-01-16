@@ -1,8 +1,8 @@
 "use client"
 
-import Header from "@/components/homepage/header"
-import Footer from "@/components/homepage/footer"
-import BackToTop from "@/components/homepage/back-to-top"
+import Header from "@/components/header"
+import Footer from "@/components/footer"
+import BackToTop from "@/components/back-to-top"
 import { motion } from "framer-motion"
 
 const containerVariants = {
@@ -28,24 +28,24 @@ const itemVariants = {
 export default function AboutPage() {
   const topValues = [
     {
-      title: "Who We Are",
+      title: "Dialux Services",
       label: "COMPANY_IDENTITY",
       description:
-        "We provide innovative lighting products and solutions tailored for residential, commercial, and industrial spaces. With years of expertise, we deliver excellence in every project.",
+        "Our Dialux simulation helps us create and identify lighting designs and specifications, allowing you to see precisely your desired lighting scheme!",
       image: "/about-who-we-are.jpg",
     },
     {
-      title: "Our Mission",
+      title: "Project Management",
       label: "MISSION_STATEMENT",
       description:
-        "To deliver energy-efficient, sustainable, and visually striking lighting solutions that transform spaces and improve quality of life.",
+        "Ecoshift Corporation's Electrical Engineers conduct site visits before and after project implementation to provide accurate recommendations for the project and proper execution/installation of products.",
       image: "/about-mission.jpg",
     },
     {
-      title: "Our Expertise",
+      title: "Installation & Support",
       label: "TECHNICAL_EXCELLENCE",
       description:
-        "Years of experience in lighting design, product sourcing, and project execution. Our team combines technical knowledge with creative vision.",
+        "Ecoshift Corporation has a team of in-house technical professionals for installation services.",
       image: "/about-expertise.jpg",
     },
   ]
@@ -89,7 +89,7 @@ export default function AboutPage() {
           </div>
         </section>
 
-        <section className="py-24">
+        <section className="pt-1 pb-16">
           <div className="max-w-7xl mx-auto px-6">
             <motion.div
               className="grid md:grid-cols-3 gap-6 mb-6"

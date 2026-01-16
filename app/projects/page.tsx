@@ -1,11 +1,16 @@
 "use client"
 
-import { useState, useMemo } from "react"
-import Header from "@/components/homepage/header"
-import Footer from "@/components/homepage/footer"
-import BackToTop from "@/components/homepage/back-to-top"
+import { useState, useMemo, useEffect } from "react"
+import Header from "@/components/header"
+import Footer from "@/components/footer"
+import BackToTop from "@/components/back-to-top"
 import { motion } from "framer-motion"
-import { ArrowRight, Lightbulb, Zap, Sun, Star, Lamp } from "lucide-react"
+import { ArrowRight, Lightbulb, Zap, Sun, Star, Lamp, Loader2 } from "lucide-react"
+
+// Import Firebase methods
+// Make sure this path points to your actual firebase config file
+import { db } from "@/lib/firebase"
+import { collection, getDocs } from "firebase/firestore"
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -27,7 +32,6 @@ const itemVariants = {
   },
 }
 
-// Floating animation for icons
 const floatAnimation = {
   animate: {
     y: [0, -6, 0],
@@ -35,25 +39,45 @@ const floatAnimation = {
   },
 }
 
+// Define interface for clarity (optional but good for TS)
+interface Project {
+  id: string
+  title: string
+  logo?: string
+  mainImage: string
+}
+
 export default function ProjectsPage() {
-  const projects = [
-    { title: "Modern Office Complex - Downtown District", image: "/project-office-complex.jpg", logo: "/logos/office-logo.png" },
-    { title: "Luxury Residential Development", image: "/project-residential.jpg", logo: "/logos/residential-logo.png" },
-    { title: "Retail Shopping Center Upgrade", image: "/project-retail.jpg", logo: "/logos/retail-logo.png" },
-    { title: "Hospitality & Restaurant Design", image: "/project-hospitality.jpg", logo: "/logos/hospitality-logo.png" },
-    { title: "Industrial Warehouse Lighting", image: "/project-industrial.jpg", logo: "/logos/industrial-logo.png" },
-    { title: "Medical Facility Lighting", image: "/project-medical.jpg", logo: "/logos/medical-logo.png" },
-    { title: "Hospitality & Restaurant Design", image: "/project-hospitality.jpg", logo: "/logos/hospitality-logo.png" },
-    { title: "Industrial Warehouse Lighting", image: "/project-industrial.jpg", logo: "/logos/industrial-logo.png" },
-    { title: "Medical Facility Lighting", image: "/project-medical.jpg", logo: "/logos/medical-logo.png" },
-  ]
+  const [projects, setProjects] = useState<Project[]>([])
+  const [isLoading, setIsLoading] = useState(true)
 
   const [searchQuery, setSearchQuery] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
   const projectsPerPage = 6
 
+  // Fetch data from Firestore
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const querySnapshot = await getDocs(collection(db, "projects"))
+        const data = querySnapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        })) as Project[]
+
+        setProjects(data)
+      } catch (error) {
+        console.error("Error fetching projects:", error)
+      } finally {
+        setIsLoading(false)
+      }
+    }
+
+    fetchProjects()
+  }, [])
+
   const filteredProjects = useMemo(
-    () => projects.filter((p) => p.title.toLowerCase().includes(searchQuery.toLowerCase())),
+    () => projects.filter((p) => p.title?.toLowerCase().includes(searchQuery.toLowerCase())),
     [searchQuery, projects]
   )
 
@@ -91,49 +115,60 @@ export default function ProjectsPage() {
         </div>
 
         {/* Projects Grid */}
-        <section className="pb-24">
-          <motion.div
-            className="grid md:grid-cols-3 gap-6"
-            variants={containerVariants}
-            initial="hidden"
-            whileInView="visible"
-            viewport={{ once: true, margin: "-100px" }}
-          >
-            {displayedProjects.map((project, index) => (
-              <motion.div
-                key={index}
-                className="relative bg-card border border-border rounded-2xl overflow-hidden group h-64"
-                variants={itemVariants}
-                initial="hidden"
-                whileInView="visible"
-              >
-                <motion.img
-                  src={project.image}
-                  alt={project.title}
-                  className="w-full h-full object-cover"
-                  initial={{ scale: 1 }}
-                  whileHover={{ scale: 1.05 }}
-                  transition={{ duration: 0.3 }}
-                />
+        <section className="pb-24 min-h-[400px]">
+          {isLoading ? (
+            <div className="flex justify-center items-center h-64">
+              <Loader2 className="w-8 h-8 animate-spin text-emerald-500" />
+            </div>
+          ) : displayedProjects.length > 0 ? (
+            <motion.div
+              className="grid md:grid-cols-3 gap-6"
+              variants={containerVariants}
+              initial="hidden"
+              whileInView="visible"
+              viewport={{ once: true, margin: "-100px" }}
+            >
+              {displayedProjects.map((project) => (
+                <motion.div
+                  key={project.id}
+                  className="relative bg-card border border-border rounded-2xl overflow-hidden group h-64"
+                  variants={itemVariants}
+                >
+                  <motion.img
+                    src={project.mainImage}
+                    alt={project.title}
+                    className="w-full h-full object-cover"
+                    initial={{ scale: 1 }}
+                    whileHover={{ scale: 1.05 }}
+                    transition={{ duration: 0.3 }}
+                  />
 
-                <div className="absolute inset-0 bg-black/50 flex flex-col justify-center items-center text-center p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                  {project.logo && (
-                    <img
-                      src={project.logo}
-                      alt={`${project.title} logo`}
-                      className="w-12 h-12 mb-3 object-contain transform translate-y-6 group-hover:translate-y-0 transition-all duration-300"
-                    />
-                  )}
-                  <h3 className="text-white font-semibold text-lg transform translate-y-6 group-hover:translate-y-0 transition-all duration-300">
-                    {project.title}
-                  </h3>
-                </div>
-              </motion.div>
-            ))}
-          </motion.div>
+                  {/* Hover Overlay */}
+                  <div className="absolute inset-0 bg-black/50 flex flex-col justify-center items-center text-center p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    {project.logo && (
+                      <img
+                        src={project.logo}
+                        alt={`${project.title} logo`}
+                        // UPDATED: Increased size to w-16 h-16 and increased margin bottom to mb-4
+                        className="w-16 h-16 mb-4 object-contain transform translate-y-6 group-hover:translate-y-0 transition-all duration-300"
+                      />
+                    )}
+                    {/* UPDATED: Added 'uppercase' class */}
+                    <h3 className="text-white font-semibold text-lg uppercase transform translate-y-6 group-hover:translate-y-0 transition-all duration-300">
+                      {project.title}
+                    </h3>
+                  </div>
+                </motion.div>
+              ))}
+            </motion.div>
+          ) : (
+            <div className="text-center text-muted-foreground py-12">
+              No projects found matching your search.
+            </div>
+          )}
 
           {/* Pagination */}
-          {totalPages > 1 && (
+          {!isLoading && totalPages > 1 && (
             <div className="mt-8 flex justify-center items-center gap-2">
               <button
                 onClick={() => setCurrentPage((p) => Math.max(p - 1, 1))}
@@ -234,7 +269,6 @@ export default function ProjectsPage() {
             </motion.div>
           </div>
         </section>
-        {/* --- End CTA --- */}
       </div>
 
       <Footer />

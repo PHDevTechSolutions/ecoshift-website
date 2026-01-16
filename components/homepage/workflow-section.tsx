@@ -6,26 +6,26 @@ export default function WorkflowSection() {
   const steps = [
     {
       number: "01",
-      title: "Consultation & Planning",
-      description: "Understanding your space, requirements, and lighting goals.",
+      title: "Industry Experts Since 2011",
+      description: "Over a decade of experience Trusted by industries nationwide",
       image: "/lighting-consultation.jpg",
     },
     {
       number: "02",
-      title: "Design & Simulation",
-      description: "Custom lighting layouts using modern lighting technology.",
+      title: "Commitment to Product Development",
+      description: "Future-ready lighting solutions\nSmarter choices for every project",
       image: "/lighting-design.jpg",
     },
     {
       number: "03",
-      title: "Product Selection",
-      description: "High-quality, energy-efficient lighting products.",
+      title: "Excellent After-Sales Service",
+      description: "After-Sales Service Center\nCustomer Care Call Center",
       image: "/lighting-products.jpg",
     },
     {
       number: "04",
-      title: "Installation & Support",
-      description: "Seamless installation with ongoing technical support.",
+      title: "Nationwide Presence",
+      description: "5 branches across the country\nAccessible service nationwide",
       image: "/lighting-installation.jpg",
     },
   ]

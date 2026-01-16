@@ -26,12 +26,12 @@ export default function Header() {
   ]
 
   return (
-    <header className="fixed top-0 left-0 w-full z-50 pointer-events-none">
+    <header className="fixed top-0 left-0 w-full z-50">
       <motion.div
         initial={{ opacity: 0, y: -12 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.35, ease: "easeOut" }}
-        className="max-w-7xl mx-auto mt-4 px-6 pointer-events-auto"
+        className="max-w-400 mx-auto mt-4 px-6 pointer-events-auto"
       >
         {/* FLOATING NAV */}
         <motion.div
@@ -105,17 +105,17 @@ export default function Header() {
 
         {/* MOBILE MENU */}
         <motion.div
-          initial={false}
-          animate={
-            isMenuOpen ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: -12, scale: 0.98, pointerEvents: "none" }
-          }
-          transition={{ duration: 0.25, ease: "easeOut" }}
-          className="
-            lg:hidden mt-3 rounded-2xl
-            bg-emerald-700/75 backdrop-blur-2xl shadow-2xl border border-white/10
-            px-6 py-5
-          "
-        >
+  initial={{ opacity: 0, y: -12, scale: 0.98 }}
+  animate={isMenuOpen ? { opacity: 1, y: 0, scale: 1 } : { opacity: 0, y: -12, scale: 0.98 }}
+  transition={{ duration: 0.25, ease: "easeOut" }}
+  className={`
+    lg:hidden mt-3 rounded-2xl
+    bg-emerald-700/75 backdrop-blur-2xl shadow-2xl border border-white/10
+    px-6 py-5
+    ${isMenuOpen ? "pointer-events-auto" : "pointer-events-none"}
+  `}
+>
+
           <div className="flex flex-col space-y-5">
             {navItems.map((item, i) => (
               <motion.div

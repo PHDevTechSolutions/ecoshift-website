@@ -1,9 +1,14 @@
 "use client"
 
-import Header from "@/components/homepage/header"
-import Footer from "@/components/homepage/footer"
-import BackToTop from "@/components/homepage/back-to-top"
+import Header from "@/components/header"
+import Footer from "@/components/footer"
+import BackToTop from "@/components/back-to-top"
 import { motion } from "framer-motion"
+import { useEffect, useState } from "react"
+import { db } from "@/lib/firebase"
+import { collection, query, orderBy, onSnapshot, limit , where} from "firebase/firestore"
+import Link from "next/link"
+import { Loader2 } from "lucide-react"
 
 const containerVariants = {
   hidden: { opacity: 0 },
@@ -26,48 +31,32 @@ const itemVariants = {
 }
 
 export default function BlogsPage() {
-  const blogs = [
-    {
-      id: "BLOG-0088",
-      title: "Choosing the Right Lighting for Commercial Spaces",
-      excerpt:
-        "Learn how to select the perfect lighting solutions for your commercial environment. From retail stores to offices, we cover everything you need to know.",
-      image: "/blog-commercial-lighting.jpg",
-      date: "Jan 15, 2025",
-    },
-    {
-      id: "BLOG-2301",
-      title: "How Smart Lighting Reduces Energy Costs",
-      excerpt:
-        "Discover how modern smart lighting systems can cut your energy consumption by up to 40%. Explore automation features and their financial benefits.",
-      image: "/blog-energy-savings.jpg",
-      date: "Jan 12, 2025",
-    },
-    {
-      id: "BLOG-7725",
-      title: "Top Lighting Trends for Modern Architecture",
-      excerpt:
-        "Stay ahead of design trends with the latest in architectural lighting. From minimalist LED designs to dynamic color-changing systems, explore what's new.",
-      image: "/blog-lighting-trends.jpg",
-      date: "Jan 10, 2025",
-    },
-    {
-      id: "BLOG-0030",
-      title: "LED vs Traditional Lighting: A Comprehensive Comparison",
-      excerpt:
-        "Understand the differences between LED and traditional lighting. Learn about efficiency, longevity, cost savings, and environmental impact.",
-      image: "/blog-led-comparison.jpg",
-      date: "Jan 8, 2025",
-    },
-    {
-      id: "BLOG-2134",
-      title: "Case Study: 50% Energy Reduction in Office Retrofit",
-      excerpt:
-        "Real results from a real project. See how a corporate office cut energy costs by half through smart lighting upgrade. Metrics and ROI included.",
-      image: "/blog-case-study.jpg",
-      date: "Jan 5, 2025",
-    },
-  ]
+  const [blogs, setBlogs] = useState<any[]>([])
+  const [loading, setLoading] = useState(true)
+
+  useEffect(() => {
+    const q = query(collection(db, "blogs"), orderBy("createdAt", "desc"), where("website", "==", "Ecoshift Corporation"), limit(6))
+
+    const unsubscribe = onSnapshot(q, (snapshot) => {
+      const fetchedBlogs = snapshot.docs.map((doc) => ({
+        id: doc.id,
+        slug: doc.data().slug || doc.id,
+        ...doc.data(),
+      }))
+      setBlogs(fetchedBlogs)
+      setLoading(false)
+    })
+
+    return () => unsubscribe()
+  }, [])
+
+  if (loading) {
+    return (
+      <div className="h-screen flex items-center justify-center">
+        <Loader2 className="animate-spin text-emerald-700" size={40} />
+      </div>
+    )
+  }
 
   return (
     <main className="min-h-screen bg-background">
@@ -92,53 +81,74 @@ export default function BlogsPage() {
         </section>
 
         {/* Blogs Grid */}
-        <section className="py-24">
-          <div className="max-w-7xl mx-auto px-6">
+      {/* Blogs Grid */}
+<section className="py-24">
+  <div className="max-w-7xl mx-auto px-6">
+    {blogs.length === 0 ? (
+      <div className="text-center py-32">
+        <p className="text-xl text-muted-foreground mb-4">
+          No blogs available at the moment.
+        </p>
+        <p className="text-sm text-muted-foreground">
+          Check back later for insights and updates from our lighting specialists.
+        </p>
+      </div>
+    ) : (
+      <motion.div
+        className="grid md:grid-cols-3 gap-6"
+        variants={containerVariants}
+        initial="hidden"
+        whileInView="visible"
+        viewport={{ once: true, margin: "-100px" }}
+      >
+        {blogs.map((blog) => (
+          <Link href={`/blogs/${blog.slug}`} key={blog.id}>
             <motion.div
-              className="grid md:grid-cols-3 gap-6"
-              variants={containerVariants}
-              initial="hidden"
-              whileInView="visible"
-              viewport={{ once: true, margin: "-100px" }}
+              variants={itemVariants}
+              whileHover={{ y: -5 }}
+              className="bg-card border border-border rounded-2xl overflow-hidden cursor-pointer"
             >
-              {blogs.map((blog, index) => (
-                <motion.div
-                  key={blog.id}
-                  variants={itemVariants}
-                  whileHover={{ y: -5 }}
-                  className="bg-card border border-border rounded-2xl overflow-hidden"
+              <div className="w-full h-48 bg-secondary/50 overflow-hidden">
+                <motion.img
+                  src={blog.coverImage || "/placeholder.svg"}
+                  alt={blog.title}
+                  className="w-full h-full object-cover"
+                  initial={{ scale: 1 }}
+                  whileHover={{ scale: 1.05 }}
+                  transition={{ duration: 0.3 }}
+                />
+              </div>
+              <div className="p-6">
+                <div className="flex justify-between items-start mb-2">
+                  <span className="text-xs font-mono text-emerald-700">{blog.category || "BLOG"}</span>
+                  <span className="text-xs text-muted-foreground">
+                    {blog.createdAt?.toDate?.().toLocaleDateString() || new Date().toLocaleDateString()}
+                  </span>
+                </div>
+                <h3 className="font-semibold text-lg mt-3 mb-2 leading-snug">{blog.title}</h3>
+                <p className="text-sm text-muted-foreground mb-4 leading-relaxed">
+                  {(
+                    blog.sections?.[0]?.description ||
+                    blog.excerpt ||
+                    "Read more about this topic."
+                  ).slice(0, 100) + ((blog.sections?.[0]?.description?.length || blog.excerpt?.length) > 100 ? "…" : "")}
+                </p>
+                <motion.span
+                  className="inline-flex items-center text-sm font-medium text-emerald-700 hover:text-emerald-800 transition-colors"
+                  whileHover={{ x: 4 }}
                 >
-                  <div className="w-full h-48 bg-secondary/50 overflow-hidden">
-                    <motion.img
-                      src={blog.image}
-                      alt={blog.title}
-                      className="w-full h-full object-cover"
-                      initial={{ scale: 1 }}
-                      whileHover={{ scale: 1.05 }}
-                      transition={{ duration: 0.3 }}
-                    />
-                  </div>
-                  <div className="p-6">
-                    <div className="flex justify-between items-start mb-2">
-                      <span className="text-xs font-mono text-emerald-700">{blog.id}</span>
-                      <span className="text-xs text-muted-foreground">{blog.date}</span>
-                    </div>
-                    <h3 className="font-semibold text-lg mt-3 mb-2 leading-snug">{blog.title}</h3>
-                    <p className="text-sm text-muted-foreground mb-4 leading-relaxed">{blog.excerpt}</p>
-                    <motion.a
-                      href="#"
-                      className="inline-flex items-center text-sm font-medium text-emerald-700 hover:text-emerald-800 transition-colors"
-                      whileHover={{ x: 4 }}
-                    >
-                      Read More
-                      <span className="ml-1">→</span>
-                    </motion.a>
-                  </div>
-                </motion.div>
-              ))}
+                  Read More
+                  <span className="ml-1">→</span>
+                </motion.span>
+              </div>
             </motion.div>
-          </div>
-        </section>
+          </Link>
+        ))}
+      </motion.div>
+    )}
+  </div>
+</section>
+
       </div>
       <Footer />
       <BackToTop />

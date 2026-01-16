@@ -34,6 +34,7 @@ export default function Footer() {
               {[{ name: "Home", href: "/" },
                 { name: "About_Us", href: "/about" },
                 { name: "Products", href: "/products" },
+                { name: "Blogs", href: "/blogs" },
                 { name: "Projects", href: "/projects" }].map((link) => (
                 <li key={link.name}>
                   <Link href={link.href} className="text-sm hover:text-emerald-700 transition-colors">
@@ -46,9 +47,9 @@ export default function Footer() {
 
           {/* Resources */}
           <div>
-            <h4 className="text-xs font-mono text-muted-foreground mb-4">RESOURCES</h4>
+            <h4 className="text-xs font-mono text-muted-foreground mb-4">OTHER</h4>
             <ul className="space-y-2">
-              {["Blogs", "Case_Studies", "Documentation", "Support"].map((link) => (
+              {["Careers", "Privacy Policy", "FAQs"].map((link) => (
                 <li key={link}>
                   <a href="#" className="text-sm hover:text-emerald-700 transition-colors">
                     {link}

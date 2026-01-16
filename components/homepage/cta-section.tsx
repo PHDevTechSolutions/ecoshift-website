@@ -2,6 +2,7 @@
 
 import { ArrowRight, Lightbulb, Zap, Sun, Star, Lamp } from "lucide-react"
 import { motion } from "framer-motion"
+import Link from "next/link"
 
 export default function CTASection() {
   const floatAnimation = {
@@ -93,6 +94,7 @@ export default function CTASection() {
               solutions.
             </motion.p>
 
+            <Link href="/quote">
             <motion.button
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
@@ -103,6 +105,7 @@ export default function CTASection() {
               Request a Quote
               <ArrowRight className="w-4 h-4" />
             </motion.button>
+            </Link>
           </div>
         </motion.div>
       </div>
