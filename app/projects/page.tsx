@@ -1,14 +1,12 @@
 "use client"
 
 import { useState, useMemo, useEffect } from "react"
+import Link from "next/link"
 import Header from "@/components/header"
 import Footer from "@/components/footer"
 import BackToTop from "@/components/back-to-top"
 import { motion } from "framer-motion"
 import { ArrowRight, Lightbulb, Zap, Sun, Star, Lamp, Loader2 } from "lucide-react"
-
-// Import Firebase methods
-// Make sure this path points to your actual firebase config file
 import { db } from "@/lib/firebase"
 import { collection, getDocs } from "firebase/firestore"
 
@@ -39,7 +37,6 @@ const floatAnimation = {
   },
 }
 
-// Define interface for clarity (optional but good for TS)
 interface Project {
   id: string
   title: string
@@ -50,12 +47,10 @@ interface Project {
 export default function ProjectsPage() {
   const [projects, setProjects] = useState<Project[]>([])
   const [isLoading, setIsLoading] = useState(true)
-
   const [searchQuery, setSearchQuery] = useState("")
   const [currentPage, setCurrentPage] = useState(1)
   const projectsPerPage = 6
 
-  // Fetch data from Firestore
   useEffect(() => {
     const fetchProjects = async () => {
       try {
@@ -64,7 +59,6 @@ export default function ProjectsPage() {
           id: doc.id,
           ...doc.data(),
         })) as Project[]
-
         setProjects(data)
       } catch (error) {
         console.error("Error fetching projects:", error)
@@ -129,36 +123,35 @@ export default function ProjectsPage() {
               viewport={{ once: true, margin: "-100px" }}
             >
               {displayedProjects.map((project) => (
-                <motion.div
-                  key={project.id}
-                  className="relative bg-card border border-border rounded-2xl overflow-hidden group h-64"
-                  variants={itemVariants}
-                >
-                  <motion.img
-                    src={project.mainImage}
-                    alt={project.title}
-                    className="w-full h-full object-cover"
-                    initial={{ scale: 1 }}
-                    whileHover={{ scale: 1.05 }}
-                    transition={{ duration: 0.3 }}
-                  />
+                <Link key={project.id} href={`/projects/${project.id}`}>
+                  <motion.div
+                    className="relative bg-card border border-border rounded-2xl overflow-hidden group h-64 cursor-pointer"
+                    variants={itemVariants}
+                  >
+                    <motion.img
+                      src={project.mainImage}
+                      alt={project.title}
+                      className="w-full h-full object-cover"
+                      initial={{ scale: 1 }}
+                      whileHover={{ scale: 1.05 }}
+                      transition={{ duration: 0.3 }}
+                    />
 
-                  {/* Hover Overlay */}
-                  <div className="absolute inset-0 bg-black/50 flex flex-col justify-center items-center text-center p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                    {project.logo && (
-                      <img
-                        src={project.logo}
-                        alt={`${project.title} logo`}
-                        // UPDATED: Increased size to w-16 h-16 and increased margin bottom to mb-4
-                        className="w-16 h-16 mb-4 object-contain transform translate-y-6 group-hover:translate-y-0 transition-all duration-300"
-                      />
-                    )}
-                    {/* UPDATED: Added 'uppercase' class */}
-                    <h3 className="text-white font-semibold text-lg uppercase transform translate-y-6 group-hover:translate-y-0 transition-all duration-300">
-                      {project.title}
-                    </h3>
-                  </div>
-                </motion.div>
+                    {/* Hover Overlay */}
+                    <div className="absolute inset-0 bg-black/50 flex flex-col justify-center items-center text-center p-6 opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                      {project.logo && (
+                        <img
+                          src={project.logo || "/placeholder.svg"}
+                          alt={`${project.title} logo`}
+                          className="w-16 h-16 mb-4 object-contain transform translate-y-6 group-hover:translate-y-0 transition-all duration-300"
+                        />
+                      )}
+                      <h3 className="text-white font-semibold text-lg uppercase transform translate-y-6 group-hover:translate-y-0 transition-all duration-300">
+                        {project.title}
+                      </h3>
+                    </div>
+                  </motion.div>
+                </Link>
               ))}
             </motion.div>
           ) : (
@@ -203,7 +196,7 @@ export default function ProjectsPage() {
           )}
         </section>
 
-        {/* --- Projects Page CTA --- */}
+        {/* CTA Section */}
         <section className="py-24">
           <div className="max-w-7xl mx-auto px-6">
             <motion.div

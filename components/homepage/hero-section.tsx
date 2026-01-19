@@ -70,7 +70,7 @@ export default function HeroSection() {
 
             <motion.div variants={itemVariants} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
               <button className="inline-flex items-center gap-2 bg-emerald-700 text-white px-6 py-3 rounded-full text-sm font-medium hover:bg-emerald-800 transition-colors">
-                Get Started
+                Explore Our Products
                 <ArrowRight className="w-4 h-4" />
               </button>
             </motion.div>

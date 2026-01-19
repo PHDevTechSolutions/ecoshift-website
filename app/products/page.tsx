@@ -133,7 +133,6 @@ export default function ProductsPage() {
 
   const filteredProducts = useMemo(() => {
     return products.filter((product) => {
-      // --- FILTER LOGIC ---
       const activeEntries = Object.entries(filters).filter(
         ([key, value]) =>
           value !== "*" &&
@@ -181,7 +180,6 @@ export default function ProductsPage() {
         if (productFlux < from || productFlux > to) return false;
       }
 
-      // --- SEARCH LOGIC ---
       if (searchQuery.trim()) {
         const queryLower = searchQuery.toLowerCase();
         const nameMatch = product.name.toLowerCase().includes(queryLower);
@@ -249,17 +247,15 @@ export default function ProductsPage() {
             {/* Products Grid */}
             <div className="lg:col-span-9">
               {/* Search Bar */}
-              {/* Search Bar */}
-<div className="mb-6 flex justify-center">
-  <input
-    type="text"
-    placeholder="Search products..."
-    value={searchQuery}
-    onChange={(e) => setSearchQuery(e.target.value)}
-    className="w-full max-w-10xl border border-gray-200 rounded-lg py-3 px-4 text-sm focus:outline-none focus:border-emerald-700 transition-all"
-  />
-</div>
-
+              <div className="mb-6 flex justify-center">
+                <input
+                  type="text"
+                  placeholder="Search products..."
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  className="w-full max-w-10xl border border-gray-200 rounded-lg py-3 px-4 text-sm focus:outline-none focus:border-emerald-700 transition-all"
+                />
+              </div>
 
               {loading ? (
                 <div className="flex flex-col items-center justify-center py-20 gap-4">
@@ -291,9 +287,10 @@ export default function ProductsPage() {
                             exit={{ opacity: 0, scale: 0.9 }}
                             variants={itemVariants}
                             whileHover={{ y: -5 }}
-                            className="bg-card border border-border rounded-2xl overflow-hidden flex flex-col group"
+                            className="bg-card border border-border rounded-2xl overflow-hidden flex flex-col group shadow-sm hover:shadow-md transition-shadow"
                           >
-                            <div className="w-full h-64 bg-secondary/50 overflow-hidden">
+                            {/* Wrap image in Link */}
+                            <Link href={`/products/${product.id}`} className="block w-full h-64 bg-secondary/50 overflow-hidden">
                               <motion.img
                                 src={
                                   product.mainImage ||
@@ -306,23 +303,28 @@ export default function ProductsPage() {
                                 whileHover={{ scale: 1.05 }}
                                 transition={{ duration: 0.3 }}
                               />
-                            </div>
+                            </Link>
+
                             <div className="p-6 flex flex-col flex-1">
-                              <div className="mb-4">
-                                <span className="text-xs font-mono text-emerald-700 tracking-widest uppercase">
-                                  {product.category || "Product"}
-                                </span>
-                                <h3 className="font-semibold text-lg mt-2 mb-2">
-                                  {product.name}
-                                </h3>
-                                <p className="text-sm text-muted-foreground mb-2">
-                                  {product.description ||
-                                    "Premium lighting solution"}
-                                </p>
-                                <p className="text-xs text-muted-foreground font-mono">
-                                  SKU: {product.sku}
-                                </p>
-                              </div>
+                              {/* Wrap info in Link */}
+                              <Link href={`/products/${product.id}`} className="group/info">
+                                <div className="mb-4">
+                                  <span className="text-xs font-mono text-emerald-700 tracking-widest uppercase">
+                                    {product.category || "Product"}
+                                  </span>
+                                  <h3 className="font-semibold text-lg mt-2 mb-2 group-hover/info:text-emerald-700 transition-colors">
+                                    {product.name}
+                                  </h3>
+                                  <p className="text-sm text-muted-foreground mb-2 line-clamp-2">
+                                    {product.description ||
+                                      "Premium lighting solution"}
+                                  </p>
+                                  <p className="text-xs text-muted-foreground font-mono">
+                                    SKU: {product.sku}
+                                  </p>
+                                </div>
+                              </Link>
+
                               <motion.button
                                 whileHover={{ scale: 1.05 }}
                                 whileTap={{ scale: 0.95 }}
@@ -460,7 +462,7 @@ export default function ProductsPage() {
               </div>
               <div className="p-6 md:p-8 border-t border-border bg-white">
                 <Link
-                  href="/quote"
+                  href="/checkout"
                   className={`block w-full py-3 text-center rounded-lg font-semibold transition-all ${
                     quoteCart.length > 0
                       ? "bg-emerald-700 text-white hover:bg-emerald-800"

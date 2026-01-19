@@ -15,7 +15,7 @@ export default function Footer() {
               <Image
                 src="/images/logo-green.png"
                 alt="RE Lighting Co."
-                width={250}  // adjust size as needed
+                width={250}
                 height={162}
                 className="object-contain"
               />
@@ -31,11 +31,13 @@ export default function Footer() {
           <div>
             <h4 className="text-xs font-mono text-muted-foreground mb-4">DIRECTORY</h4>
             <ul className="space-y-2">
-              {[{ name: "Home", href: "/" },
+              {[
+                { name: "Home", href: "/" },
                 { name: "About_Us", href: "/about" },
                 { name: "Products", href: "/products" },
                 { name: "Blogs", href: "/blogs" },
-                { name: "Projects", href: "/projects" }].map((link) => (
+                { name: "Projects", href: "/projects" },
+              ].map((link) => (
                 <li key={link.name}>
                   <Link href={link.href} className="text-sm hover:text-emerald-700 transition-colors">
                     {link.name}
@@ -45,15 +47,21 @@ export default function Footer() {
             </ul>
           </div>
 
-          {/* Resources */}
+          {/* Other */}
           <div>
             <h4 className="text-xs font-mono text-muted-foreground mb-4">OTHER</h4>
             <ul className="space-y-2">
-              {["Careers", "Privacy Policy", "FAQs"].map((link) => (
-                <li key={link}>
-                  <a href="#" className="text-sm hover:text-emerald-700 transition-colors">
-                    {link}
-                  </a>
+              {[
+                { name: "FAQs", href: "/faqs" },
+                { name: "Careers", href: "/careers" },
+                { name: "Privacy Policy", href: "/privacy-policy" },
+                { name: "Warranty Policy", href: "/warranty-policy" },
+                { name: "Terms and Conditions", href: "/terms-and-conditions" },
+              ].map((link) => (
+                <li key={link.name}>
+                  <Link href={link.href} className="text-sm hover:text-emerald-700 transition-colors">
+                    {link.name}
+                  </Link>
                 </li>
               ))}
             </ul>
