@@ -52,11 +52,12 @@ export default function Footer() {
             <h4 className="text-xs font-mono text-muted-foreground mb-4">OTHER</h4>
             <ul className="space-y-2">
               {[
-                { name: "FAQs", href: "/faqs" },
-                { name: "Careers", href: "/careers" },
-                { name: "Privacy Policy", href: "/privacy-policy" },
-                { name: "Warranty Policy", href: "/warranty-policy" },
-                { name: "Terms and Conditions", href: "/terms-and-conditions" },
+                { name: "FAQs", href: "/extras/faqs" },
+                { name: "Careers", href: "/extras/careers" },
+                { name: "Privacy Policy", href: "/extras/privacy-policy" },
+                { name: "Warranty Policy", href: "/extras/warranty-policy" },
+                { name: "Terms and Conditions", href: "/extras/terms-and-conditions" },
+                { name: "Branches", href: "/extras/branches" },
               ].map((link) => (
                 <li key={link.name}>
                   <Link href={link.href} className="text-sm hover:text-emerald-700 transition-colors">
