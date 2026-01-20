@@ -83,6 +83,7 @@ export default function Footer() {
                   <span>ORDERS</span>
                   <span>LOGS</span>
                 </div>
+                <Link href="/portal">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
@@ -90,6 +91,7 @@ export default function Footer() {
                 >
                   Get Started
                 </motion.button>
+                </Link>
               </div>
             </div>
           </div>
