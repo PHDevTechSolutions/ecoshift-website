@@ -3,7 +3,7 @@
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import { motion } from "framer-motion";
-import { ShieldCheck, Eye, Lock, Globe, FileText, UserCheck } from "lucide-react";
+import { Eye, FileText, Globe, Lock, UserCheck, ShieldCheck } from "lucide-react";
 
 const sections = [
   {
@@ -51,13 +51,29 @@ export default function PrivacyPolicy() {
             animate={{ opacity: 1, y: 0 }}
             className="text-center"
           >
-            <span className="text-xs font-mono text-emerald-700 tracking-[0.3em] uppercase mb-4 block">
-              ◆ Legal
-            </span>
-            <h1 className="font-serif text-5xl md:text-6xl mb-6">Privacy Policy</h1>
-            <p className="text-muted-foreground text-lg">
-              Last Updated: January 19, 2026
-            </p>
+            <motion.span 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-xs font-mono text-emerald-700 tracking-[0.3em] uppercase mb-4 block"
+            >
+              ◆ Your Privacy Matters
+            </motion.span>
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="font-serif text-5xl md:text-6xl mb-6 leading-tight"
+            >
+              Privacy Policy
+            </motion.h1>
+            <motion.p 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+              className="text-muted-foreground text-lg max-w-2xl mx-auto"
+            >
+              Ecoshift Corporation is committed to protecting your personal information and ensuring transparency.
+            </motion.p>
           </motion.div>
         </div>
       </section>
@@ -71,53 +87,42 @@ export default function PrivacyPolicy() {
             transition={{ delay: 0.2 }}
             className="prose prose-emerald max-w-none"
           >
-            <p className="text-xl text-muted-foreground leading-relaxed mb-16 italic">
-              Ecoshift Corporation (“we,” “our,” or “us”) values your privacy. This policy explains what information we collect, how we use it, and the choices you have. By using our website www.ecoshiftcorp.com, you agree to the practices described here.
+            <p className="text-lg text-muted-foreground leading-relaxed mb-16">
+              Ecoshift Corporation ("we," "our," or "us") values your privacy. This policy explains what information we collect, how we use it, and the choices you have. By using our website www.ecoshiftcorp.com, you agree to the practices described here.
             </p>
 
-            <div className="space-y-16">
+            <div className="space-y-12">
               {sections.map((section, index) => (
                 <motion.div 
                   key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  className="group"
+                  transition={{ delay: index * 0.05 }}
+                  className="relative pl-12 pb-12 border-l border-emerald-100 last:border-0"
                 >
-                  <div className="flex items-center gap-4 mb-4">
-                    <div className="p-2 bg-emerald-50 rounded-lg group-hover:bg-emerald-700 group-hover:text-white transition-colors duration-300">
-                      {section.icon}
-                    </div>
-                    <h2 className="text-2xl font-bold m-0">{section.title}</h2>
+                  <div className="absolute left-[-17px] top-0 bg-white p-2 border border-emerald-100 rounded-full shadow-sm group-hover:bg-emerald-700 transition-colors">
+                    {section.icon}
                   </div>
-                  <p className="text-muted-foreground leading-relaxed text-lg">
+                  <h2 className="text-xl font-bold mb-3 m-0 text-foreground uppercase tracking-tight">
+                    {section.title}
+                  </h2>
+                  <p className="text-muted-foreground leading-relaxed m-0">
                     {section.content}
                   </p>
                 </motion.div>
               ))}
             </div>
 
-            <hr className="my-16 border-border" />
-
-            <div className="bg-secondary/20 p-8 rounded-3xl border border-border">
-              <h3 className="text-xl font-bold mb-4 m-0">Contact & Inquiries</h3>
-              <p className="text-muted-foreground mb-6">
-                If you have any questions or concerns regarding this Privacy Policy, or if you wish to exercise your data rights, please reach out to us:
-              </p>
-              <div className="flex flex-col gap-3 font-mono text-sm">
-                <a href="mailto:sales@ecoshiftcorp.com" className="text-emerald-700 hover:underline">
-                  sales@ecoshiftcorp.com
-                </a>
-                <span className="text-muted-foreground">
-                  Official Hotlines: Contact our main office
-                </span>
-              </div>
+            <div className="mt-20 p-8 bg-[#004e26] text-white rounded-[2rem] shadow-xl relative overflow-hidden">
+                <div className="relative z-10">
+                    <h3 className="font-serif text-2xl mb-4">Contact & Data Requests</h3>
+                    <p className="text-emerald-100 text-sm leading-relaxed mb-0">
+                        For any privacy concerns or to exercise your data rights, please contact us at <strong>sales@ecoshiftcorp.com</strong>. We will respond to all requests within 30 days. This Privacy Policy may be updated from time to time, and changes will be posted on this page.
+                    </p>
+                </div>
+                <div className="absolute top-[-20%] right-[-10%] w-64 h-64 bg-emerald-500 rounded-full blur-[100px] opacity-20"></div>
             </div>
-
-            <p className="text-xs text-muted-foreground mt-12 text-center">
-              This Privacy Policy may be updated from time to time. Any changes will be posted on this page with the date of revision.
-            </p>
           </motion.div>
         </div>
       </section>

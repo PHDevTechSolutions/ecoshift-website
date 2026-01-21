@@ -3,7 +3,7 @@
 import Header from "@/components/header";
 import Footer from "@/components/footer";
 import { motion } from "framer-motion";
-import { ShieldCheck, Calendar, Wrench, RefreshCw, AlertCircle, FileText, MapPin } from "lucide-react";
+import { ShieldCheck, Calendar, Wrench, RefreshCw, AlertCircle, FileText } from "lucide-react";
 
 const warrantyDetails = [
   {
@@ -40,98 +40,85 @@ export default function WarrantyPolicy() {
 
       {/* Hero Section */}
       <section className="pt-40 pb-20 bg-secondary/30">
-        <div className="max-w-4xl mx-auto px-6 text-center">
+        <div className="max-w-4xl mx-auto px-6">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
+            className="text-center"
           >
-            <span className="text-xs font-mono text-emerald-700 tracking-[0.3em] uppercase mb-4 block">
+            <motion.span 
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="text-xs font-mono text-emerald-700 tracking-[0.3em] uppercase mb-4 block"
+            >
               ◆ Quality Assurance
-            </span>
-            <h1 className="font-serif text-5xl md:text-6xl mb-6">Warranty Policy</h1>
-            <div className="flex items-center justify-center gap-2 text-muted-foreground text-sm font-mono uppercase tracking-wider">
-              <MapPin size={14} /> Ecoshift Corporation, Mandaluyong
-            </div>
+            </motion.span>
+            <motion.h1 
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 }}
+              className="font-serif text-5xl md:text-6xl mb-6 leading-tight"
+            >
+              Warranty Policy
+            </motion.h1>
+            <motion.p 
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              transition={{ delay: 0.2 }}
+              className="text-muted-foreground text-lg max-w-2xl mx-auto"
+            >
+              Learn about our comprehensive warranty coverage for Optilux and Elune Series products.
+            </motion.p>
           </motion.div>
         </div>
       </section>
 
-      {/* Important Disclaimer Card */}
-      <section className="py-12 px-6">
+      {/* Content Section */}
+      <section className="py-24 px-6">
         <div className="max-w-3xl mx-auto">
-          <motion.div 
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="bg-amber-50 border border-amber-200 p-8 rounded-3xl flex flex-col md:flex-row gap-6 items-center md:items-start"
-          >
-            <AlertCircle className="text-amber-600 flex-shrink-0" size={32} />
-            <div>
-              <h3 className="text-amber-900 font-bold mb-2 uppercase text-sm tracking-widest">Important Note</h3>
-              <p className="text-amber-800 leading-relaxed text-sm m-0">
-                Products purchased under <strong>promotions, discounts, or special sale events</strong> are not eligible for Warranty coverage. This Warranty applies exclusively to Optilux/Elune Series Products purchased at regular price.
-              </p>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-      {/* Main Content */}
-      <section className="pb-24 px-6">
-        <div className="max-w-3xl mx-auto">
-          <div className="space-y-12">
-            {warrantyDetails.map((detail, index) => (
-              <motion.div 
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="group"
-              >
-                <div className="flex items-center gap-4 mb-4">
-                  <div className="p-3 bg-emerald-50 rounded-xl text-emerald-700 group-hover:bg-emerald-700 group-hover:text-white transition-all duration-300">
-                    {detail.icon}
-                  </div>
-                  <h2 className="text-xl font-bold m-0 uppercase tracking-tight">{detail.title}</h2>
-                </div>
-                <p className="text-muted-foreground leading-relaxed text-lg pl-2 border-l-2 border-transparent group-hover:border-emerald-700 transition-colors">
-                  {detail.content}
-                </p>
-              </motion.div>
-            ))}
-          </div>
-
-          <hr className="my-16 border-border" />
-
-          {/* Contact for Claims */}
           <motion.div 
             initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            className="bg-[#004e26] text-white p-10 rounded-[2.5rem] shadow-2xl relative overflow-hidden"
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2 }}
+            className="prose prose-emerald max-w-none"
           >
-            <div className="relative z-10">
-              <h3 className="font-serif text-3xl mb-4">File a Claim</h3>
-              <p className="text-emerald-100 mb-8 max-w-md">
-                Claims must be submitted within the Warranty Period with valid proof of purchase.
-              </p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <a href="mailto:sales@ecoshiftcorp.com" className="flex items-center gap-3 bg-white/10 p-4 rounded-xl hover:bg-white/20 transition-colors border border-white/10">
-                  <FileText size={18} />
-                  <span className="text-sm font-semibold tracking-tight">Email Submission</span>
-                </a>
-                <a href="/contact" className="flex items-center gap-3 bg-white text-[#004e26] p-4 rounded-xl hover:bg-emerald-50 transition-colors shadow-lg">
-                  <RefreshCw size={18} />
-                  <span className="text-sm font-semibold tracking-tight">Contact Representative</span>
-                </a>
-              </div>
+            <p className="text-lg text-muted-foreground leading-relaxed mb-16">
+              Ecoshift Corporation stands behind the quality of our products. This Warranty Policy outlines the coverage, terms, and conditions of our warranty for all eligible products purchased from Ecoshift.
+            </p>
+
+            <div className="space-y-12">
+              {warrantyDetails.map((detail, index) => (
+                <motion.div 
+                  key={index}
+                  initial={{ opacity: 0, x: -20 }}
+                  whileInView={{ opacity: 1, x: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.05 }}
+                  className="relative pl-12 pb-12 border-l border-emerald-100 last:border-0"
+                >
+                  <div className="absolute left-[-17px] top-0 bg-white p-2 border border-emerald-100 rounded-full shadow-sm group-hover:bg-emerald-700 transition-colors">
+                    {detail.icon}
+                  </div>
+                  <h2 className="text-xl font-bold mb-3 m-0 text-foreground uppercase tracking-tight">
+                    {detail.title}
+                  </h2>
+                  <p className="text-muted-foreground leading-relaxed m-0">
+                    {detail.content}
+                  </p>
+                </motion.div>
+              ))}
             </div>
-            {/* Background Accent */}
-            <div className="absolute top-[-50%] right-[-10%] w-80 h-80 bg-emerald-500 rounded-full blur-[120px] opacity-20"></div>
+
+            <div className="mt-20 p-8 bg-[#004e26] text-white rounded-[2rem] shadow-xl relative overflow-hidden">
+                <div className="relative z-10">
+                    <h3 className="font-serif text-2xl mb-4">File a Warranty Claim</h3>
+                    <p className="text-emerald-100 text-sm leading-relaxed mb-0">
+                        To file a warranty claim, submit valid proof of purchase and product details to <strong>sales@ecoshiftcorp.com</strong>. Claims must be submitted within the one-year warranty period. Any modification or unauthorized repair will void this warranty.
+                    </p>
+                </div>
+                <div className="absolute top-[-20%] right-[-10%] w-64 h-64 bg-emerald-500 rounded-full blur-[100px] opacity-20"></div>
+            </div>
           </motion.div>
-          
-          <p className="text-center text-xs text-muted-foreground mt-12 italic">
-            Any modification, servicing, or repair by unauthorized personnel will void this Warranty.
-          </p>
         </div>
       </section>
 

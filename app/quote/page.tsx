@@ -177,7 +177,7 @@ export default function QuotePage() {
                     </motion.div>
                     <h2 className="text-4xl font-black uppercase tracking-tighter">Request Sent!</h2>
                     <p className="text-gray-500 font-medium">Thank you. Our team will contact you shortly.</p>
-                    <button onClick={() => setStatus("idle")} className="text-[#d11a2a] text-[10px] font-black uppercase tracking-widest pt-4 hover:underline">Send Another Quote</button>
+                    <button onClick={() => setStatus("idle")} className="text-emerald-700 text-[10px] font-black uppercase tracking-widest pt-4 hover:underline">Send Another Quote</button>
                   </div>
                 ) : (
                   <form onSubmit={handleSubmit} className="space-y-6">
