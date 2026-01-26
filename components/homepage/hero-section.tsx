@@ -2,6 +2,7 @@
 
 import { ArrowRight } from "lucide-react"
 import { motion } from "framer-motion"
+import Link from "next/link"
 import { useState, useEffect } from "react"
 
 const containerVariants = {
@@ -69,10 +70,12 @@ export default function HeroSection() {
             </motion.p>
 
             <motion.div variants={itemVariants} whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
+              <Link href="/products">
               <button className="inline-flex items-center gap-2 bg-emerald-700 text-white px-6 py-3 rounded-full text-sm font-medium hover:bg-emerald-800 transition-colors">
                 Explore Our Products
                 <ArrowRight className="w-4 h-4" />
               </button>
+              </Link>
             </motion.div>
           </motion.div>
 
