@@ -8,8 +8,7 @@ import Header from "@/components/header";
 import Footer from "@/components/footer";
 import { motion, AnimatePresence } from "framer-motion";
 import { 
-  ChevronLeft, Plus, Check, Loader2, Info, 
-  ShieldCheck, Truck, ShoppingBag, X, Trash2 
+  ChevronLeft, Plus, Check, Loader2, X, Trash2, ShoppingBag 
 } from "lucide-react";
 import Link from "next/link";
 
@@ -76,10 +75,21 @@ export default function ProductDetailPage() {
         </Link>
 
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-16">
-          <div className="aspect-square bg-secondary/30 rounded-3xl overflow-hidden border border-border">
-            <img src={product.mainImage || product.image || "/placeholder.svg"} alt={product.name} className="w-full h-full object-cover" />
+          {/* Main Image */}
+          <div className="flex flex-col gap-6">
+            <div className="aspect-square bg-secondary/30 rounded-3xl overflow-hidden border border-border">
+              <img src={product.mainImage || product.image || "/placeholder.svg"} alt={product.name} className="w-full h-full object-cover" />
+            </div>
+
+            {/* QR Code */}
+            {product.qrCodeImage && (
+              <div className="aspect-square w-48 lg:w-64 bg-white p-4 rounded-2xl border border-border shadow-inner">
+                <img src={product.qrCodeImage} alt="QR Code" className="w-full h-full object-contain" />
+              </div>
+            )}
           </div>
 
+          {/* Product Info */}
           <div className="flex flex-col">
             <span className="text-xs font-mono text-emerald-700 tracking-widest uppercase mb-4">◆ {product.category || "Professional Lighting"}</span>
             <h1 className="font-serif text-4xl md:text-5xl mb-6">{product.name}</h1>
@@ -99,7 +109,7 @@ export default function ProductDetailPage() {
         </div>
       </div>
 
-      {/* Floating Cart & Sidebar (Matches Products Page) */}
+      {/* Floating Cart */}
       <motion.button onClick={() => setIsCartOpen(true)} className="fixed bottom-8 right-8 z-[1001] bg-emerald-700 text-white p-6 rounded-full shadow-2xl">
         <ShoppingBag size={24} />
         {quoteCart.length > 0 && <span className="absolute -top-2 -right-2 bg-white text-emerald-700 text-xs font-bold w-6 h-6 flex items-center justify-center rounded-full border-2 border-emerald-700">{quoteCart.length}</span>}
